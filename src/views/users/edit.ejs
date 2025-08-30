@@ -1,0 +1,125 @@
+<%- include('../layouts/main', { title: title }) %>
+
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white shadow rounded-lg">
+        <!-- Header del formulario -->
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900">Editar Usuario</h2>
+                    <p class="text-sm text-gray-600 mt-1">Modifica la información del usuario</p>
+                </div>
+                <a href="/users" class="btn-secondary">
+                    <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Volver
+                </a>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <form method="POST" action="/users/<%= user._id %>?_method=PUT" class="p-6 space-y-6">
+            <!-- Nombre -->
+            <div>
+                <label for="name" class="form-label">Nombre Completo *</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    value="<%= user.name %>"
+                    class="form-input <%= locals.errors && errors.find(e => e.path === 'name') ? 'border-red-500 focus:ring-red-500' : '' %>"
+                    placeholder="Ingresa el nombre completo"
+                    required
+                >
+                <% if (locals.errors && errors.find(e => e.path === 'name')) { %>
+                    <p class="mt-1 text-sm text-red-600">
+                        <%= errors.find(e => e.path === 'name').msg %>
+                    </p>
+                <% } %>
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="form-label">Correo Electrónico *</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    value="<%= user.email %>"
+                    class="form-input <%= locals.errors && errors.find(e => e.path === 'email') ? 'border-red-500 focus:ring-red-500' : '' %>"
+                    placeholder="usuario@ejemplo.com"
+                    required
+                >
+                <% if (locals.errors && errors.find(e => e.path === 'email')) { %>
+                    <p class="mt-1 text-sm text-red-600">
+                        <%= errors.find(e => e.path === 'email').msg %>
+                    </p>
+                <% } %>
+            </div>
+
+            <!-- Rol -->
+            <div>
+                <label for="role" class="form-label">Rol del Usuario</label>
+                <select 
+                    id="role" 
+                    name="role" 
+                    class="form-input"
+                >
+                    <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>👤 Usuario</option>
+                    <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>👑 Administrador</option>
+                </select>
+                <p class="mt-1 text-sm text-gray-500">Los administradores tienen acceso completo al sistema</p>
+            </div>
+
+            <!-- Estado -->
+            <div>
+                <label for="isActive" class="form-label">Estado del Usuario</label>
+                <select 
+                    id="isActive" 
+                    name="isActive" 
+                    class="form-input"
+                >
+                    <option value="true" <%= user.isActive ? 'selected' : '' %>>✅ Activo</option>
+                    <option value="false" <%= !user.isActive ? 'selected' : '' %>>❌ Inactivo</option>
+                </select>
+                <p class="mt-1 text-sm text-gray-500">Los usuarios inactivos no pueden acceder al sistema</p>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-sm font-medium text-gray-900 mb-2">Información del Sistema</h3>
+                <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                    <div>
+                        <span class="font-medium">ID:</span> <%= user._id %>
+                    </div>
+                    <div>
+                        <span class="font-medium">Creado:</span> <%= new Date(user.createdAt).toLocaleDateString('es-ES') %>
+                    </div>
+                    <div>
+                        <span class="font-medium">Última actualización:</span> <%= new Date(user.updatedAt).toLocaleDateString('es-ES') %>
+                    </div>
+                    <div>
+                        <span class="font-medium">Estado actual:</span> 
+                        <span class="<%= user.isActive ? 'text-green-600' : 'text-red-600' %> font-medium">
+                            <%= user.isActive ? 'Activo' : 'Inactivo' %>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                <a href="/users" class="btn-secondary">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-primary">
+                    <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Actualizar Usuario
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
